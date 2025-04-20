@@ -1,0 +1,33 @@
+{
+    "name": "mcp-server-repeating-thoughts",
+    "version": "1.0.0",
+    "description": "MCP Server Quick Start",
+    "type": "commonjs",
+    "main": "dist/index.js",
+    "bin": {
+        "mcp-server-repeating-thoughts": "dist/index.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "ts-node-dev src/index.ts 'Great thinking.' 'Excellent reflection.' 'Insightful thinking process.'",
+        "build": "tsc",
+        "prepare": "npm run build",
+        "start": "node dist/index.js 'Great thinking.' 'Excellent reflection.' 'Insightful thinking process.'",
+        "postinstall": "npm run build"
+    },
+    "dependencies": {
+        "fastmcp": "^1.21.0",
+        "zod": "^3.24.3"
+    },
+    "devDependencies": {
+        "@types/node": "^22.14.1",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.8.3"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
