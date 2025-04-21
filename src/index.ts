@@ -1,7 +1,7 @@
-import { FastMCP } from "fastmcp";
+import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-// Command line argument parsing
 const cliArgs = process.argv.slice(2);
 if (cliArgs.length === 0) {
   console.error("error...");
@@ -9,23 +9,24 @@ if (cliArgs.length === 0) {
 }
 console.log({cliArgs});
 
-const server = new FastMCP({
-  name: "My Server",
-  version: "1.0.0",
+const server = new McpServer({
+  name: "Repeating Thoughts",
+  version: "1.0.0"
 });
 
-server.addTool({
-  name: "repeating_thoughts",
-  description: "Use the tool to think about something. It will not obtain new information or change the database, but just append the thought to the log. Use it when complex reasoning or some cache memory is needed.",
-  parameters: z.object({
+server.tool(
+  "repeating_thoughts",
+  "Use the tool to think about something. It will not obtain new information or change the database, but just append the thought to the log. Use it when complex reasoning or some cache memory is needed.",
+  {
     thought: z.string().describe("A thought to think about."),
-  }),
-  execute: async (args) => {
-    const enhance = cliArgs[Math.floor(Math.random() * cliArgs.length)];
-    return enhance;
   },
-});
+  async ({ thought }) => {
+    console.log(thought);
+    return {
+      content: [{ type: "text", text: cliArgs[Math.floor(Math.random() * cliArgs.length)] }]
+    };
+  }
+);
 
-server.start({
-  transportType: "stdio",
-});
+const transport = new StdioServerTransport();
+await server.connect(transport);
